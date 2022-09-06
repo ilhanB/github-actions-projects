@@ -8,34 +8,41 @@ jobs:
   nax-githubactions: 
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    env:
+      IMG_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}
     steps: 
       - name: Check out the repo
         uses: actions/checkout@v3
+
+      - name: Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.IMG_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
     
-      - name: Login to Dockerhub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with: 
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: actions/checkout@v3
+      - name: docker login
+        env: 
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          REPO_NAME: ${{ secrets.REPO_NAME }}
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with: 
-          images: ilhanbzn/githubactions
-
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     push: ${{ github.event.base_ref =='refs/heads/main' && github.ref_type == 'tag' && !startsWith(github.ref, 'refs/tags/v0.')}}
+      #     tags: ${{ steps.metadata.outputs.tags }}
         
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          # tags: ${{ steps.meta.outputs.tags }}
-          # labels: ${{ steps.meta.outputs.labels }}
+      - name: Build the Docker image
+        run: docker build .. --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.metadata.outputs.tags }}
+      
+      - name: Push_Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}
 
-      - uses: paulhatch/semantic-version@v4.0.2
-        with:
-          tag_prefix: "v"
-          major_pattern: "(MAJOR)"
-          minor_pattern: "(MINOR)"
-                
+
