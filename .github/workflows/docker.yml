@@ -24,7 +24,7 @@ jobs:
         with: 
           images: ilhanbzn/githubactions
           tags: |
-            type=ref,event=pull
+            type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
 
