@@ -2,7 +2,6 @@ name: Github Actions Project
 on: 
   push:
     branches: [ "main" ]
-    tags: [ "v1.0.2" ]
 
 jobs:
   nax-githubactions: 
@@ -23,10 +22,6 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with: 
           images: ilhanbzn/githubactions
-          tags: |
-            type=ref,event=tags
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
         
       - name: Build and push Docker image
