@@ -1,6 +1,6 @@
 name: Github Actions Project 
 on: push
-  branches: ["main"]
+  branches: [ "main" ]
 
 jobs:
   nax-githubactions: 
