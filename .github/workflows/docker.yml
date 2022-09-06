@@ -16,7 +16,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           REPO_NAME: ${{ secrets.REPO_NAME }}
         run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       
       - name: Get current date # get the date of the build
         id: date
