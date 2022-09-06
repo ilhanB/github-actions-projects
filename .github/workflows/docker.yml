@@ -22,7 +22,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: Build the Docker image
-        run: docker build ~/Desktop/my-projects/github-actions-projects/ --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.date.outputs.date }}
+        run: docker build ~/Desktop/my-projects/github-actions-projects/Dockerfile --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.date.outputs.date }}
       
       - name: Push_Image
         run: docker push ${{secrets.DOCKER_USERNAME}}/${{secrets.REPO_NAME}}:${{steps.date.outputs.date}}
