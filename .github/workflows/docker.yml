@@ -31,14 +31,9 @@ jobs:
         
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-      - name: Build image
         run: |
           tag_v=$(git describe --tags $(git rev-list --tags --max-count=1))
           tag=$(echo $tag_v | sed 's/v//')
           docker build -t my_image_${tag} .
+
 
