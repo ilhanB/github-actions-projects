@@ -1,7 +1,9 @@
 name: Github Actions Project 
 on: 
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
+  release:
+    types: [published]
 
 jobs:
   nax-githubactions: 
@@ -31,4 +33,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
