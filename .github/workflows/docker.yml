@@ -40,9 +40,9 @@ jobs:
       #     tags: ${{ steps.metadata.outputs.tags }}
         
       - name: Build the Docker image
-        run: docker build --file ~/Desktop/my-projects/github-actions-projects/Dockerfile -t "${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}" .
+        run: docker build --file ~/Desktop/my-projects/github-actions-projects/Dockerfile -t "$DOCKER_USERNAME/$REPO_NAME:${{ steps.metadata.outputs.tags }}" .
       
       - name: Push_Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}
+        run: docker push "$DOCKER_USERNAME/$REPO_NAME:${{ steps.metadata.outputs.tags }}
 
 
