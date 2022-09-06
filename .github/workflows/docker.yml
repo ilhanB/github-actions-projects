@@ -10,11 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Check out the repo
-      - uses: actions/checkout@v3
-      - uses: haya14busa/action-update-semver@v1
-        id: version
-        with:
-          major_version_tag_only: true 
+        uses: actions/checkout@v3
     
       - name: Login to Dockerhub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -31,9 +27,30 @@ jobs:
         
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        run: |
-          tag_v=$(git describe --tags $(git rev-list --tags --max-count=1))
-          tag=$(echo $tag_v | sed 's/v//')
-          docker build -t my_image_${tag} .
-
-
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  
+  update-semver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haya14busa/action-update-semver@v1
+        id: version
+        with:
+          major_version_tag_only: true  # (optional, default is "false")
+  Build:
+    name: Build Image
+    needs: [update-semver]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Build image
+      run: |
+        tag_v=$(git describe --tags $(git rev-list --tags --max-count=1))
+        tag=$(echo $tag_v | sed 's/v//')
+        docker build -t my_image_${tag} .
+        
