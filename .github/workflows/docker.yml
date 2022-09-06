@@ -52,5 +52,4 @@ jobs:
       run: |
         tag_v=$(git describe --tags $(git rev-list --tags --max-count=1))
         tag=$(echo $tag_v | sed 's/v//')
-        docker build -t my_image_${tag} .
         
