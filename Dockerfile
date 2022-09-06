@@ -1,7 +1,6 @@
 FROM python:alpine
-WORKDIR /app
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install flask
 COPY . /app
+WORKDIR /app
 EXPOSE 80
 CMD python ./hello.py
