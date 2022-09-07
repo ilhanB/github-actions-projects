@@ -33,15 +33,15 @@ jobs:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build
-        run: docker build -t back .
+        run: docker build .. --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}
       
       - name: Tags
         run: |
-          docker tag back ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}/back:latest
+          docker tag back ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}/${{secrets.REPO_NAME}}:latest
 
       - name: Push
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}/back:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:latest
    
 
 
