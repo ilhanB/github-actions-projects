@@ -37,12 +37,12 @@ jobs:
       
       - name: Tags
         run: |
-          docker tag back ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
-          docker tag back ${{ secrets.DOCKER_USERNAME }}/back:latest
+          docker tag back ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}/back:latest
+
       - name: Push
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/back:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}/back:latest
+   
 
 
 
