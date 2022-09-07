@@ -3,11 +3,26 @@ on:
   push:
     branches: [ "main" ]
 
+
 jobs:
   nax-githubactions: 
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    env:
+      IMG_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}
     steps: 
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.IMG_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+    
       - uses: actions/checkout@v3
       - name: docker login
         env: 
@@ -16,14 +31,25 @@ jobs:
           REPO_NAME: ${{ secrets.REPO_NAME }}
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: Build
+        run: docker build -t back .
       
-      - name: Get current date # get the date of the build
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
-      - name: Build the Docker image
-        run: docker build .. --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.date.outputs.date }}
+      - name: Tags
+        run: |
+          docker tag back ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
+          docker tag back ${{ secrets.DOCKER_USERNAME }}/back:latest
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/back:latest
+
+
+
+      # - name: Build the Docker image
+      #   run: docker build .. --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.date.outputs.date }}
       
-      - name: Push_Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{steps.date.outputs.date}}
+      # - name: Push_Image
+      #   run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{steps.date.outputs.date}}
 
         
