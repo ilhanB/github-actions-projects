@@ -2,6 +2,8 @@ name: Github Actions Project
 on: 
   push:
     branches: [ "main" ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 
 jobs:
@@ -36,6 +38,13 @@ jobs:
           push: ${{ github.event.base_ref =='refs/heads/main' && github.ref_type == 'tag' && !startsWith(github.ref, 'refs/tags/v0.')}}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
+
+      - name: Build the Docker image
+        run: docker build .. --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.metadata.outputs.tags }}
+      
+      - name: Push_Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}
+
 
           
       # - uses: actions/checkout@v3
