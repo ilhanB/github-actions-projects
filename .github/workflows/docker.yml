@@ -36,10 +36,9 @@ jobs:
         with:
           context: .
           tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
 
       - name: Build the Docker image
-        run: docker build .. --file Dockerfile 
+        run: run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{secrets.REPO_NAME}}:${{ steps.date.outputs.date }} .
       
       - name: Push_Image
         run: docker push ${{ env.IMG_NAME }}:${{ steps.metadata.outputs.tags }}
