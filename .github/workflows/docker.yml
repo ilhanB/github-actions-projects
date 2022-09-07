@@ -34,6 +34,7 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
+        run: docker build .. --file ~/Desktop/my-projects/github-actions-projects/Dockerfile --tag "${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}" .
         with:
           context: .
           push: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}
