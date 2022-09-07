@@ -43,7 +43,7 @@ jobs:
         run: docker build .. --file Dockerfile 
       
       - name: Push_Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}
+        run: docker push $username/$password:${{ steps.metadata.outputs.tags }}
 
 
           
