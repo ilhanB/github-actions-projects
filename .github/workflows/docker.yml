@@ -43,7 +43,7 @@ jobs:
         run: docker build .. --file Dockerfile 
       
       - name: Push_Image
-        run: docker push $IMG_NAME:${{ steps.metadata.outputs.tags }}
+        run: docker push ${{ env.IMG_NAME }}:${{ steps.metadata.outputs.tags }}
 
 
           
