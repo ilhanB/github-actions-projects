@@ -40,7 +40,7 @@ jobs:
       #     tags: ${{ steps.metadata.outputs.tags }}
         
       - name: Build the Docker image
-      - uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v3
 
       - name: Build Docker
         run: docker build .. --file ~/Desktop/my-projects/github-actions-projects/Dockerfile --tag "${{ secrets.DOCKER_USERNAME }}/${{ secrets.REPO_NAME }}:${{ steps.metadata.outputs.tags }}" .
