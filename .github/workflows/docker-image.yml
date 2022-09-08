@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IMG_NAME: muratyarali/githubactions
+      IMG_NAME: ilhanbzn/githubactions
 
     steps:
       -
